@@ -1872,10 +1872,16 @@ mfloat_t *quat_null(mfloat_t *result)
 
 mfloat_t *quat_multiply(mfloat_t *result, mfloat_t *q0, mfloat_t *q1)
 {
-	result[0] = q0[3] * q1[0] + q0[0] * q1[3] + q0[1] * q1[2] - q0[2] * q1[1];
-	result[1] = q0[3] * q1[1] + q0[1] * q1[3] + q0[2] * q1[0] - q0[0] * q1[2];
-	result[2] = q0[3] * q1[2] + q0[2] * q1[3] + q0[0] * q1[1] - q0[1] * q1[0];
-	result[3] = q0[3] * q1[3] - q0[0] * q1[0] - q0[1] * q1[1] - q0[2] * q1[2];
+	mfloat_t tmp[QUAT_SIZE];
+	/* To allow for input aliasing */
+	tmp[0] = q0[3] * q1[0] + q0[0] * q1[3] + q0[1] * q1[2] - q0[2] * q1[1];
+	tmp[1] = q0[3] * q1[1] + q0[1] * q1[3] + q0[2] * q1[0] - q0[0] * q1[2];
+	tmp[2] = q0[3] * q1[2] + q0[2] * q1[3] + q0[0] * q1[1] - q0[1] * q1[0];
+	tmp[3] = q0[3] * q1[3] - q0[0] * q1[0] - q0[1] * q1[1] - q0[2] * q1[2];
+	result[0] = tmp[0];
+	result[1] = tmp[1];
+	result[2] = tmp[2];
+	result[3] = tmp[3];
 	return result;
 }
 
