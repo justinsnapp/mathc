@@ -1650,7 +1650,7 @@ mfloat_t *vec4_add_f(mfloat_t *result, mfloat_t *v0, mfloat_t f)
 	return result;
 }
 
-mfloat_t *vec4_subtract(mfloat_t *result, mfloat_t *v0, mfloat_t *v1)
+mfloat_t *vec4_subtract(mfloat_t *result, const mfloat_t *v0, const mfloat_t *v1)
 {
 	result[0] = v0[0] - v1[0];
 	result[1] = v0[1] - v1[1];
@@ -1668,7 +1668,7 @@ mfloat_t *vec4_subtract_f(mfloat_t *result, mfloat_t *v0, mfloat_t f)
 	return result;
 }
 
-mfloat_t *vec4_multiply(mfloat_t *result, mfloat_t *v0, mfloat_t *v1)
+mfloat_t *vec4_multiply(mfloat_t *result, const mfloat_t *v0, const mfloat_t *v1)
 {
 	result[0] = v0[0] * v1[0];
 	result[1] = v0[1] * v1[1];
@@ -1686,7 +1686,7 @@ mfloat_t *vec4_multiply_f(mfloat_t *result, mfloat_t *v0, mfloat_t f)
 	return result;
 }
 
-mfloat_t *vec4_multiply_mat4(mfloat_t *result, mfloat_t *v0, mfloat_t *m0)
+mfloat_t *vec4_multiply_mat4(mfloat_t *result, const mfloat_t *v0, const  mfloat_t *m0)
 {
 	mfloat_t x = v0[0];
 	mfloat_t y = v0[1];
@@ -2727,7 +2727,7 @@ mfloat_t *mat4_negative(mfloat_t *result, mfloat_t *m0)
 	return result;
 }
 
-mfloat_t *mat4_transpose(mfloat_t *result, mfloat_t *m0)
+mfloat_t *mat4_transpose(mfloat_t *result, const mfloat_t *m0)
 {
 	mfloat_t transposed[MAT4_SIZE];
 	transposed[0] = m0[0];
@@ -3130,7 +3130,7 @@ mfloat_t *mat4_scale(mfloat_t *result, mfloat_t *m0, mfloat_t *v0)
 	return result;
 }
 
-mfloat_t *mat4_multiply(mfloat_t *result, mfloat_t *m0, mfloat_t *m1)
+mfloat_t *mat4_multiply(mfloat_t *result, const mfloat_t *m0, const mfloat_t *m1)
 {
 	mfloat_t multiplied[MAT4_SIZE];
 	multiplied[0] = m0[0] * m1[0] + m0[4] * m1[1] + m0[8] * m1[2] + m0[12] * m1[3];
