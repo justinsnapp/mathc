@@ -2298,7 +2298,7 @@ mfloat_t *mat3_identity(mfloat_t *result)
 	return result;
 }
 
-mfloat_t mat3_determinant(mfloat_t *m0)
+mfloat_t mat3_determinant(const mfloat_t *m0)
 {
 	mfloat_t m11 = m0[0];
 	mfloat_t m21 = m0[1];
@@ -2370,7 +2370,7 @@ mfloat_t *mat3_transpose(mfloat_t *result, mfloat_t *m0)
 	return result;
 }
 
-mfloat_t *mat3_cofactor(mfloat_t *result, mfloat_t *m0)
+mfloat_t *mat3_cofactor(mfloat_t *result, const mfloat_t *m0)
 {
 	mfloat_t cofactor[MAT3_SIZE];
 	mfloat_t minor[MAT2_SIZE];
@@ -2469,10 +2469,43 @@ mfloat_t *mat3_multiply_f(mfloat_t *result, mfloat_t *m0, mfloat_t f)
 	return result;
 }
 
-mfloat_t *mat3_inverse(mfloat_t *result, mfloat_t *m0)
+mfloat_t *mat3_inverse(mfloat_t *result, const mfloat_t *m0)
 {
-	result = m0;
-	return result;
+	mfloat_t inverse[MAT3_SIZE];
+	mfloat_t det = mat3_determinant(m0);
+	mfloat_t a = m0[0];
+	mfloat_t b = m0[3];
+	mfloat_t c = m0[6];
+	mfloat_t d = m0[1];
+	mfloat_t e = m0[4];
+	mfloat_t f = m0[7];
+	mfloat_t g = m0[2];
+	mfloat_t h = m0[5];
+	mfloat_t i = m0[8];
+
+	inverse[0] = e * i - f * h;
+	inverse[1] = -(d * i - f * g);
+	inverse[2] = d * h - e * g;
+	inverse[3] = -(b * i - c * h);
+	inverse[4] = a * i - c * g;
+	inverse[5] = -(a * h - b * g);
+	inverse[6] = b * f - c * e;
+	inverse[7] = -(a * f - c * d);
+	inverse[8] = a * e - b * d;
+
+	mat3_multiply_f(inverse, inverse, MFLOAT_C(1.0) / det);
+
+	result[0] = inverse[0];
+	result[1] = inverse[1];
+	result[2] = inverse[2];
+	result[3] = inverse[3];
+	result[4] = inverse[4];
+	result[5] = inverse[5];
+	result[6] = inverse[6];
+	result[7] = inverse[7];
+	result[8] = inverse[8];
+
+	return (result);
 }
 
 mfloat_t *mat3_scaling(mfloat_t *result, mfloat_t *v0)
