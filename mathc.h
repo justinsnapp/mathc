@@ -653,7 +653,8 @@ mfloat_t *mat3_assign(mfloat_t *result, mfloat_t *m0);
 mfloat_t *mat3_negative(mfloat_t *result, mfloat_t *m0);
 mfloat_t *mat3_transpose(mfloat_t *result, mfloat_t *m0);
 mfloat_t *mat3_cofactor(mfloat_t *result, const mfloat_t *m0);
-mfloat_t *mat3_multiply(mfloat_t *result, mfloat_t *m0, mfloat_t *m1);
+mfloat_t *mat3_multiply(mfloat_t *result, const mfloat_t *m0,
+    const mfloat_t *m1);
 mfloat_t *mat3_multiply_f(mfloat_t *result, mfloat_t *m0, mfloat_t f);
 mfloat_t *mat3_inverse(mfloat_t *result, const mfloat_t *m0);
 mfloat_t *mat3_scaling(mfloat_t *result, mfloat_t *v0);

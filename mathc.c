@@ -2431,7 +2431,8 @@ mfloat_t *mat3_cofactor(mfloat_t *result, const mfloat_t *m0)
 	return result;
 }
 
-mfloat_t *mat3_multiply(mfloat_t *result, mfloat_t *m0, mfloat_t *m1)
+mfloat_t *mat3_multiply(mfloat_t *result, const mfloat_t *m0,
+    const mfloat_t *m1)
 {
 	mfloat_t multiplied[MAT3_SIZE];
 	multiplied[0] = m0[0] * m1[0] + m0[3] * m1[1] + m0[6] * m1[2];
