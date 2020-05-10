@@ -2593,7 +2593,7 @@ mfloat_t *mat3_rotation_quat(mfloat_t *result, mfloat_t *q0)
 	mfloat_t zz = q0[2] * q0[2];
 	mfloat_t xy = q0[0] * q0[1];
 	mfloat_t zw = q0[2] * q0[3];
-	mfloat_t xz = q0[8] * q0[0];
+	mfloat_t xz = q0[0] * q0[2];
 	mfloat_t yw = q0[1] * q0[3];
 	mfloat_t yz = q0[1] * q0[2];
 	mfloat_t xw = q0[0] * q0[3];
