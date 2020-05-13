@@ -18,6 +18,8 @@ the following restrictions:
   3. This notice may not be removed or altered from any source distribution.
 */
 
+#include <stdint.h>
+
 #include "mathc.h"
 
 #if defined(MATHC_USE_INT)
