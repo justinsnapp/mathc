@@ -52,6 +52,10 @@ the following restrictions:
 #include <float.h>
 #endif
 
+#ifdef	__cplusplus
+extern "C" {
+#endif
+
 #define VEC2_SIZE 2
 #define VEC3_SIZE 3
 #define VEC4_SIZE 4
@@ -1297,6 +1301,10 @@ mfloat_t back_ease_in_out(mfloat_t f);
 mfloat_t bounce_ease_out(mfloat_t f);
 mfloat_t bounce_ease_in(mfloat_t f);
 mfloat_t bounce_ease_in_out(mfloat_t f);
+#endif
+
+#ifdef	__cplusplus
+}
 #endif
 
 #endif
