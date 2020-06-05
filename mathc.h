@@ -102,12 +102,17 @@ typedef int64_t mint_t;
 #endif
 
 #if defined(MATHC_USE_FLOATING_POINT)
+
 #if defined(MATHC_FLOATING_POINT_TYPE)
 typedef MATHC_FLOATING_POINT_TYPE mfloat_t;
 #endif
-#if !defined(MATHC_USE_SINGLE_FLOATING_POINT) && !defined(MATHC_USE_DOUBLE_FLOATING_POINT)
-#define MATHC_USE_SINGLE_FLOATING_POINT
+
+#if !defined(MATHC_USE_SINGLE_FLOATING_POINT) && \
+    !defined(MATHC_USE_DOUBLE_FLOATING_POINT) && \
+    !defined(MATHC_USE_LONG_DOUBLE_FLOATING_POINT)
+#define MATHC_USE_LONG_DOUBLE_FLOATING_POINT
 #endif
+
 #if defined(MATHC_USE_SINGLE_FLOATING_POINT)
 #if !defined(MATHC_FLOATING_POINT_TYPE)
 typedef float mfloat_t;
@@ -132,6 +137,7 @@ typedef float mfloat_t;
 #define MROUND roundf
 #define MFLOAT_C(c) c ## f
 #endif
+
 #if defined(MATHC_USE_DOUBLE_FLOATING_POINT)
 #if !defined(MATHC_FLOATING_POINT_TYPE)
 typedef double mfloat_t;
@@ -156,6 +162,32 @@ typedef double mfloat_t;
 #define MROUND round
 #define MFLOAT_C(c) c
 #endif
+
+#if defined(MATHC_USE_LONG_DOUBLE_FLOATING_POINT)
+#if !defined(MATHC_FLOATING_POINT_TYPE)
+typedef long double mfloat_t;
+#endif
+#define MPI 3.14159265358979323846
+#define MPI_2 1.57079632679489661923
+#define MPI_4 0.78539816339744830962
+#define MFLT_EPSILON DBL_EPSILON
+#define MFABS fabsl
+#define MFMIN fminl
+#define MFMAX fmaxl
+#define MSQRT sqrtl
+#define MSIN sinl
+#define MCOS cosl
+#define MACOS acosl
+#define MASIN asinl
+#define MTAN tanl
+#define MATAN2 atan2l
+#define MPOW powl
+#define MFLOOR floorl
+#define MCEIL ceill
+#define MROUND roundl
+#define MFLOAT_C(c) c ## l
+#endif
+
 #endif
 
 #if defined(MATHC_USE_STRUCT_FUNCTIONS) || defined(MATHC_USE_POINTER_STRUCT_FUNCTIONS)
