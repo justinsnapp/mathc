@@ -22,6 +22,8 @@ the following restrictions:
 
 #include "mathc.h"
 
+#include <acfutils/log.h>
+
 #if defined(MATHC_USE_INT)
 mint_t clampi(mint_t value, mint_t min, mint_t max)
 {
@@ -1874,16 +1876,30 @@ mfloat_t *quat_null(mfloat_t *result)
 
 mfloat_t *quat_multiply(mfloat_t *result, mfloat_t *q0, mfloat_t *q1)
 {
-	mfloat_t tmp[QUAT_SIZE];
+	//mfloat_t tmp[QUAT_SIZE];
+	
+	// logMsg("[DEBUG] quat_multiply q0 is %11f, %11f, %llf, %llf", (double) q0[0], (double) q0[1], 
+ //                                                                (double) q0[2], (double) q0[3]);
+
+	// logMsg("[DEBUG] quat_multiply q1 is %11f, %11f, %llf, %llf", (double) q1[0], (double) q1[1], 
+ //                                                                (double) q1[2], (double) q1[3]);
+	
 	/* To allow for input aliasing */
-	tmp[0] = q0[3] * q1[0] + q0[0] * q1[3] + q0[1] * q1[2] - q0[2] * q1[1];
-	tmp[1] = q0[3] * q1[1] + q0[1] * q1[3] + q0[2] * q1[0] - q0[0] * q1[2];
-	tmp[2] = q0[3] * q1[2] + q0[2] * q1[3] + q0[0] * q1[1] - q0[1] * q1[0];
-	tmp[3] = q0[3] * q1[3] - q0[0] * q1[0] - q0[1] * q1[1] - q0[2] * q1[2];
-	result[0] = tmp[0];
-	result[1] = tmp[1];
-	result[2] = tmp[2];
-	result[3] = tmp[3];
+	result[0] = q0[3] * q1[0] + q0[0] * q1[3] + q0[1] * q1[2] - q0[2] * q1[1];
+	result[1] = q0[3] * q1[1] + q0[1] * q1[3] + q0[2] * q1[0] - q0[0] * q1[2];
+	result[2] = q0[3] * q1[2] + q0[2] * q1[3] + q0[0] * q1[1] - q0[1] * q1[0];
+	result[3] = q0[3] * q1[3] - q0[0] * q1[0] - q0[1] * q1[1] - q0[2] * q1[2];
+	// result[0] = tmp[0];
+	// result[1] = tmp[1];
+	// result[2] = tmp[2];
+	// result[3] = tmp[3];
+
+	//logMsg("[DEBUG] quat_multiply result is %11f, %11f, %llf, %llf", (double) tmp[0], (double) tmp[1], 
+   //                                                             (double) tmp[2], (double) tmp[3]);
+
+	// logMsg("[DEBUG] quat_multiply result is %11f, %11f, %llf, %llf", (double) result[0], (double) result[1], 
+ //                                                                (double) result[2], (double) result[3]);
+
 	return result;
 }
 
