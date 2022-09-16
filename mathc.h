@@ -313,7 +313,7 @@ struct quat {
 	mfloat_t z;
 	mfloat_t w;
 #endif
-};
+}__attribute__((__packed__));
 
 /*
 Matrix 2×2 representation:

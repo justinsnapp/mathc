@@ -1849,10 +1849,18 @@ mfloat_t *quat(mfloat_t *result, mfloat_t x, mfloat_t y, mfloat_t z, mfloat_t w)
 
 mfloat_t *quat_assign(mfloat_t *result, mfloat_t *q0)
 {
+
+	//logMsg("[DEBUG] quat_assign q0 is %11f, %11f, %llf, %llf", (double) q0[0], (double) q0[1], 
+   //                                                              (double) q0[2], (double) q0[3]);
+
 	result[0] = q0[0];
 	result[1] = q0[1];
 	result[2] = q0[2];
 	result[3] = q0[3];
+
+	//logMsg("[DEBUG] quat_assign result is %11f, %11f, %llf, %llf", (double) result[0], (double) result[1], 
+   //                                                              (double) result[2], (double) result[3]);
+
 	return result;
 }
 
@@ -2074,7 +2082,17 @@ mfloat_t *quat_slerp(mfloat_t *result, mfloat_t *q0, mfloat_t *q1, mfloat_t f)
 	mfloat_t d = quat_dot(q0, q1);
 	mfloat_t f0;
 	mfloat_t f1;
-	quat_assign(tmp1, q1);
+	quat_assign(&tmp1, q1);
+
+	logMsg("[DEBUG] quat_slerp q0 is %11f, %11f, %llf, %llf", (double) q0[0], (double) q0[1], 
+                                                                (double) q0[2], (double) q0[3]); 
+
+	logMsg("[DEBUG] quat_slerp q1 is %11f, %11f, %llf, %llf", (double) q1[0], (double) q1[1], 
+                                                                (double) q1[2], (double) q1[3]); 
+
+	logMsg("[DEBUG] quat_slerp tmp1 is %11f, %11f, %llf, %llf", (double) tmp1[0], (double) tmp1[1], 
+                                                                (double) tmp1[2], (double) tmp1[3]);
+
 	if (d < MFLOAT_C(0.0)) {
 		quat_negative(tmp1, tmp1);
 		d = -d;
@@ -2088,10 +2106,21 @@ mfloat_t *quat_slerp(mfloat_t *result, mfloat_t *q0, mfloat_t *q1, mfloat_t f)
 		f0 = MSIN((MFLOAT_C(1.0) - f) * theta) / sin_theta;
 		f1 = MSIN(f * theta) / sin_theta;
 	}
+
+	logMsg("[DEBUG] quat_slerp tmp1 after operations is %11f, %11f, %llf, %llf", (double) tmp1[0], (double) tmp1[1], 
+                                                                (double) tmp1[2], (double) tmp1[3]);
+
 	result[0] = q0[0] * f0 + tmp1[0] * f1;
 	result[1] = q0[1] * f0 + tmp1[1] * f1;
 	result[2] = q0[2] * f0 + tmp1[2] * f1;
 	result[3] = q0[3] * f0 + tmp1[3] * f1;
+
+	logMsg("[DEBUG] quat_slerp f0 is %11f, and f1 is %11f", (double) f0, (double) f1);
+
+	logMsg("[DEBUG] quat_slerp result is %11f, %11f, %llf, %llf", (double) result[0], (double) result[1], 
+                                                                (double) result[2], (double) result[3]);
+
+
 	return result;
 }
 
@@ -4839,8 +4868,23 @@ struct quat squat_divide_f(struct quat q0, mfloat_t f)
 
 struct quat squat_negative(struct quat q0)
 {
+	/*
 	struct quat result;
 	quat_negative((mfloat_t *)&result, (mfloat_t *)&q0);
+	return result;
+	*/
+	struct quat result;
+#if defined(MATHC_USE_UNIONS)
+	result.v[0] = -q0.v[0];
+	result.v[1] = -q0.v[1];
+	result.v[2] = -q0.v[2];
+	result.v[3] = -q0.v[3];
+#else
+	result.x = -q0.x;
+	result.y = -q0.y;
+	result.z = -q0.z;
+	result.w = -q0.w;
+#endif
 	return result;
 }
 
@@ -4867,7 +4911,11 @@ struct quat squat_normalize(struct quat q0)
 
 mfloat_t squat_dot(struct quat q0, struct quat q1)
 {
-	return quat_dot((mfloat_t *)&q0, (mfloat_t *)&q1);
+#if defined(MATHC_USE_UNIONS)
+	return q0.v[0] * q1.v[0] + q0.v[1] * q1.v[1] + q0.v[2] * q1.v[2] + q0.v[3] * q1.v[3];
+#else
+	return q0.x * q1.x + q0.y * q1.y + q0.z * q1.z + q0.w * q1.w;
+#endif
 }
 
 struct quat squat_power(struct quat q0, mfloat_t exponent)
@@ -4908,7 +4956,61 @@ struct quat squat_lerp(struct quat q0, struct quat q1, mfloat_t f)
 struct quat squat_slerp(struct quat q0, struct quat q1, mfloat_t f)
 {
 	struct quat result;
-	quat_slerp((mfloat_t *)&result, (mfloat_t *)&q0, (mfloat_t *)&q1, f);
+	
+	mfloat_t d = squat_dot(q0, q1);
+	mfloat_t f0;
+	mfloat_t f1;
+	struct quat tmp1 = q1;
+
+/*
+	logMsg("[DEBUG] squat_slerp q0 is %11f, %11f, %llf, %llf", (double) q0.x, (double) q0.y, 
+                                                                (double) q0.z, (double) q0.w); 
+
+	logMsg("[DEBUG] squat_slerp q1 is %11f, %11f, %llf, %llf", (double) q1.x, (double) q1.y, 
+                                                                (double) q1.z, (double) q1.w); 
+
+	logMsg("[DEBUG] squat_slerp tmp1 is %11f, %11f, %llf, %llf", (double) tmp1.x, (double) tmp1.y, 
+                                                                (double) tmp1.z, (double) tmp1.w);
+*/
+
+	if (d < MFLOAT_C(0.0)) {
+		tmp1 = squat_negative(tmp1);
+		d = -d;
+	}
+	if (d > MFLOAT_C(0.9995)) {
+		f0 = MFLOAT_C(1.0) - f;
+		f1 = f;
+	} else {
+		mfloat_t theta = MACOS(d);
+		mfloat_t sin_theta = MSIN(theta);
+		f0 = MSIN((MFLOAT_C(1.0) - f) * theta) / sin_theta;
+		f1 = MSIN(f * theta) / sin_theta;
+	}
+
+/*
+	logMsg("[DEBUG] squat_slerp tmp1 after operations is %11f, %11f, %llf, %llf", (double) tmp1.x, (double) tmp1.y, 
+                                                                (double) tmp1.z, (double) tmp1.w);
+*/
+
+#if defined(MATHC_USE_UNIONS)
+	result.v[0] = q0.v[0] * f0 + tmp1.v[0] * f1;
+	result.v[1] = q0.v[1] * f0 + tmp1.v[1] * f1;
+	result.v[2] = q0.v[2] * f0 + tmp1.v[2] * f1;
+	result.v[3] = q0.v[3] * f0 + tmp1.v[3] * f1;
+#else
+	result.x = q0.x * f0 + tmp1.x * f1;
+	result.y = q0.y * f0 + tmp1.y * f1;
+	result.z = q0.z * f0 + tmp1.z * f1;
+	result.w = q0.w * f0 + tmp1.w * f1;
+#endif
+
+/*
+	logMsg("[DEBUG] quat_slerp f0 is %11f, and f1 is %11f", (double) f0, (double) f1);
+
+	logMsg("[DEBUG] squat_slerp result is %11f, %11f, %llf, %llf", (double) result.x, (double) result.y, 
+                                                                (double) result.z, (double) result.w);
+*/
+
 	return result;
 }
 
